@@ -1,0 +1,84 @@
+{
+	"id": "fbe8cd56-2da3-46af-aa74-7c137224efa0",
+	"name": "dictionary",
+	"description": "",
+	"auth": null,
+	"events": null,
+	"variables": [],
+	"order": [
+		"9b150ec0-25f7-4a4b-86da-27744d3b278d",
+		"5e23ace8-13e1-413a-8360-7353a69f3efa",
+		"55e92220-7cde-4fd7-a47a-65c37efeb687"
+	],
+	"folders_order": [],
+	"folders": [],
+	"requests": [
+		{
+			"id": "55e92220-7cde-4fd7-a47a-65c37efeb687",
+			"name": "GetAll",
+			"url": "http://localhost:3000/eng-fra/GetAll",
+			"description": "",
+			"data": null,
+			"dataMode": "",
+			"headerData": [],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"headers": "",
+			"pathVariables": {}
+		},
+		{
+			"id": "5e23ace8-13e1-413a-8360-7353a69f3efa",
+			"name": "FrenchToEnglish",
+			"url": "http://localhost:3000/fra-eng/search?q=pomme",
+			"description": "",
+			"data": null,
+			"dataMode": null,
+			"headerData": [],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "q",
+					"value": "pomme",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"headers": "",
+			"pathVariables": {}
+		},
+		{
+			"id": "9b150ec0-25f7-4a4b-86da-27744d3b278d",
+			"name": "EnglishToFrench",
+			"url": "http://localhost:3000/eng-fra/search?q=apple",
+			"description": "",
+			"data": null,
+			"dataMode": null,
+			"headerData": [],
+			"method": "GET",
+			"pathVariableData": [],
+			"queryParams": [
+				{
+					"key": "q",
+					"value": "apple",
+					"equals": true,
+					"description": "",
+					"enabled": true
+				}
+			],
+			"auth": null,
+			"events": [],
+			"folder": null,
+			"headers": "",
+			"pathVariables": {}
+		}
+	]
+}
