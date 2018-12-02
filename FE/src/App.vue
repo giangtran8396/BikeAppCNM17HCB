@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <NavBarUser/>
     <b-container>
       <router-view/>
     </b-container>
@@ -7,8 +8,12 @@
 </template>
 
 <script>
+import NavBarUser from './components/NavBarUser'
 export default {
-  name: 'App'
+  name: 'App',
+  components:{
+    NavBarUser
+  }
 }
 </script>
 
@@ -19,6 +24,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

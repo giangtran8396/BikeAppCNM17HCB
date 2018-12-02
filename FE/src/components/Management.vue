@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>{{msg}}</h1>
-        <div id="driverMap">
+        <div id="managementMap">
 
         </div>
     </div>
@@ -10,10 +10,10 @@
 import config from '../utilities/config'
 import GoogleMapsLoader from 'google-maps'
 export default {
-    name :"driver",
+    name :"management",
     data() {
         return {
-            msg: 'driver'
+            msg: 'management'
         }
     },
     mounted(){
@@ -22,7 +22,7 @@ export default {
         GoogleMapsLoader.LANGUAGE = config.GoogleMaps.Language;
         GoogleMapsLoader.LIBRARIES = config.GoogleMaps.Libraies;
         GoogleMapsLoader.load(function(google){
-            var map = new google.maps.Map(document.getElementById('driverMap'), {
+            var map = new google.maps.Map(document.getElementById('managementMap'), {
             center: {lat: -34.397, lng: 150.644},
             zoom: 8
             });
@@ -31,7 +31,7 @@ export default {
 }
 </script>
 <style>
-#driverMap {
+#managementMap {
     width: 100%;
     height: 300px;
     }

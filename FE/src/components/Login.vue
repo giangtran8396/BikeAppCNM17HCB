@@ -1,5 +1,6 @@
 <template>
-    <b-row class="justify-content-center">
+    <div id="login" class="mt-5">
+        <b-row class="justify-content-center">
         <b-col cols="12" md="5">
             <b-card>
                 <b-form>
@@ -30,6 +31,7 @@
             </b-card>    
         </b-col>
     </b-row>
+    </div>
 </template>
 <script>
 import service from '../api/user'
@@ -50,8 +52,30 @@ export default {
         }
         service.UserLogin(userModel).then(res => {
              if(res.status == 200){
-                setCookieToken(res.data.access_token,1);
-                self.$router.push({name : "Driver"});
+                var objCookie = {
+                    ID:res.data.userEntity.ID,
+                    access_token:res.data.access_token,
+                    role: res.data.userEntity.Role,
+                    Name: res.data.userEntity.Name
+                }
+                setCookieToken(objCookie,1);
+                this.$store.dispatch('setLogged',{
+                    ID: res.data.userEntity.ID,
+                    IsLogged : true,
+                    Name: res.data.userEntity.Name
+                });
+                switch(res.data.userEntity.Role){
+                    case 1:
+                        self.$router.push({name : "Management"});
+                    break;
+                    case 2:
+                        self.$router.push({name : "Customer"});
+                    break;
+                    case 3:
+                        self.$router.push({name : "Driver"});
+                    break;
+                }
+
             }
         }).catch(err => {
             console.log(err);

@@ -4,6 +4,8 @@ import {getCookieToken} from '@/helpers/helper'
 import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login'
 import Driver from '@/components/Driver'
+import Customer from '@/components/Customer'
+import Management from '@/components/Management'
 Vue.use(Router)
 
 const router = new Router({
@@ -22,6 +24,18 @@ const router = new Router({
       path: '/Driver',
       name: 'Driver',
       component: Driver,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/Management',
+      name: 'Management',
+      component: Management,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/Customer',
+      name: 'Customer',
+      component: Customer,
       meta: { requiresAuth: true }
     },
   ]

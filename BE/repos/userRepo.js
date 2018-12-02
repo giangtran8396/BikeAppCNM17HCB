@@ -7,6 +7,6 @@ exports.createUser = function(user){
 }
 
 exports.loginUser = function(user){
-    var sql = `SELECT Name , UserName , Password , Role FROM user WHERE UserName = '${user.UserName}'`;
+    var sql = `SELECT ID ,Name , UserName , Password , Role FROM user WHERE UserName = '${user.UserName}'`;
     return db.load(sql);
 }

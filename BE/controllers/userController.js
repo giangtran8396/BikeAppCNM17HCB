@@ -12,6 +12,7 @@ router.post('/login',(req,res) => {
                  if(resCompare){
                     res.statusCode = 200;
                     var userEntity = {
+                        ID : result[0].ID,
                         Name : result[0].Name,
                         Role : result[0].Role
                     }
