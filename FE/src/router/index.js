@@ -1,12 +1,15 @@
 import Vue from 'vue'
+import VueSweetalert2 from 'vue-sweetalert2';
 import Router from 'vue-router'
 import {getCookieToken} from '@/helpers/helper'
 import HelloWorld from '@/components/HelloWorld'
 import Login from '@/components/Login'
 import Driver from '@/components/Driver'
 import Customer from '@/components/Customer'
-import Management from '@/components/Management'
-Vue.use(Router)
+import Receiver from '@/components/Receiver'
+
+Vue.use(Router);
+Vue.use(VueSweetalert2);
 
 const router = new Router({
   routes: [
@@ -27,9 +30,9 @@ const router = new Router({
       meta: { requiresAuth: true }
     },
     {
-      path: '/Management',
-      name: 'Management',
-      component: Management,
+      path: '/Receiver',
+      name: 'Receiver',
+      component: Receiver,
       meta: { requiresAuth: true }
     },
     {

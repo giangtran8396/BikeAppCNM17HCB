@@ -1,6 +1,10 @@
 <template>
-    <b-navbar v-if="getUser.IsLogged" toggleable="md" type="dark" variant="success">
+    <b-navbar v-if="getUser.IsLogged" toggleable="md" type="dark" variant="success" style="color:white !important">
     <b-collapse is-nav id="nav_collapse">
+    <b-navbar-nav v-if="getUser.Role == '1'">
+      <b-nav-item href="#">Nhận yêu cầu</b-nav-item>
+      <b-nav-item href="#">xác định vị trí</b-nav-item>
+    </b-navbar-nav>
     <!-- Right aligned nav items -->
     <b-navbar-nav class="ml-auto">
       <b-nav-item-dropdown right>
@@ -40,7 +44,8 @@ export default {
             var _user = {
                 ID : _cookie.ID,
                 IsLogged : true,
-                Name: _cookie.Name
+                Name: _cookie.Name,
+                Role: _cookie.Role
             }
             this.$store.dispatch('setLogged',_user);
         }
@@ -56,7 +61,8 @@ export default {
             var _user = {
                 ID : _cookie.ID,
                 IsLogged : true,
-                Name: _cookie.Name
+                Name: _cookie.Name,
+                Role: _cookie.Role
             }
             this.$store.dispatch('setLogged',_user);
         }
@@ -66,3 +72,8 @@ export default {
   }
 }
 </script>
+<style>
+.navbar-dark .navbar-nav .nav-link{
+  color: rgb(255, 255, 255);
+}
+</style>

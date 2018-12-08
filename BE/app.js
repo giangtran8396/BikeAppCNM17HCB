@@ -2,6 +2,7 @@ var express = require('express');
 var jwt = require('jsonwebtoken');
 var bodyParser = require('body-parser');
 var userCtrl = require('./controllers/userController');
+var managerCtrl = require('./controllers/managerController');
 var cors = require('cors');
 var app = express();
 var http = require('http').Server(app);
@@ -34,7 +35,7 @@ io.on('connection', function(socket){
 var verifyAccessToken = (req, res, next) => {
     var token = req.headers['x-access-token'];
     if (token) {
-        jwt.verify(token, 'SECRET', (err, payload) => {
+        jwt.verify(token, 'BikeApp17HCBSECERT', (err, payload) => {
             if (err) {
                 res.statusCode = 403;
                 res.json({
@@ -60,7 +61,7 @@ app.get('/', (req, res) => {
     });
 });
 app.use('/user',userCtrl);
-
+app.use('/manager',verifyAccessToken,managerCtrl);
 var port = process.env.port || 3000;
 http.listen(port, () => {
     console.log(`api running on port ${port}`);

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 02, 2018 lúc 04:50 AM
+-- Thời gian đã tạo: Th12 08, 2018 lúc 08:33 AM
 -- Phiên bản máy phục vụ: 10.1.36-MariaDB
 -- Phiên bản PHP: 7.2.10
 
@@ -21,6 +21,30 @@ SET time_zone = "+00:00";
 --
 -- Cơ sở dữ liệu: `bikeapp`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `request`
+--
+
+CREATE TABLE `request` (
+  `Id` int(11) NOT NULL,
+  `Name` varchar(100) COLLATE utf8_vietnamese_ci DEFAULT NULL,
+  `Phone` varchar(20) COLLATE utf8_vietnamese_ci DEFAULT NULL,
+  `Address` varchar(150) COLLATE utf8_vietnamese_ci DEFAULT NULL,
+  `Location1` varchar(250) COLLATE utf8_vietnamese_ci DEFAULT NULL,
+  `Location2` varchar(250) COLLATE utf8_vietnamese_ci DEFAULT NULL,
+  `Note` varchar(500) COLLATE utf8_vietnamese_ci DEFAULT NULL,
+  `Status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `request`
+--
+
+INSERT INTO `request` (`Id`, `Name`, `Phone`, `Address`, `Location1`, `Location2`, `Note`, `Status`) VALUES
+(1, 'giang', '0123456', '227 nvc q5', '{\"lat\":10.76142127010728,\"lng\":106.68046755}', NULL, 'note note note', 1);
 
 -- --------------------------------------------------------
 
@@ -63,6 +87,12 @@ INSERT INTO `user` (`ID`, `UserName`, `Password`, `Name`, `Role`) VALUES
 --
 
 --
+-- Chỉ mục cho bảng `request`
+--
+ALTER TABLE `request`
+  ADD PRIMARY KEY (`Id`);
+
+--
 -- Chỉ mục cho bảng `user`
 --
 ALTER TABLE `user`
@@ -71,6 +101,12 @@ ALTER TABLE `user`
 --
 -- AUTO_INCREMENT cho các bảng đã đổ
 --
+
+--
+-- AUTO_INCREMENT cho bảng `request`
+--
+ALTER TABLE `request`
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT cho bảng `user`

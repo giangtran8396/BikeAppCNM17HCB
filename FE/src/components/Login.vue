@@ -5,23 +5,23 @@
             <b-card>
                 <b-form>
                 <img src="../assets/logo.png">
-                <b-form-group label="User name:"
+                <b-form-group label="Tên đăng nhập:"
                                 label-for="userName"
                                 class="text-left">
                     <b-form-input id="userName"
                                 type="text"
                                 v-model="userName"
-                                placeholder="UserName">
+                                placeholder="Tên đăng nhập">
                     </b-form-input>
                 </b-form-group>
-                <b-form-group label="Password:"
+                <b-form-group label="Mật khẩu:"
                                 label-for="password"
                                 class="text-left">
                     <b-form-input id="password"
                                 type="password"
                                 v-model="password"
                                 @keyup.enter.native="login"
-                                placeholder="Password">
+                                placeholder="Mật khẩu">
                     </b-form-input>
                 </b-form-group>
                 <b-form-group class="pt-3">
@@ -55,18 +55,19 @@ export default {
                 var objCookie = {
                     ID:res.data.userEntity.ID,
                     access_token:res.data.access_token,
-                    role: res.data.userEntity.Role,
+                    Role: res.data.userEntity.Role,
                     Name: res.data.userEntity.Name
                 }
                 setCookieToken(objCookie,1);
                 this.$store.dispatch('setLogged',{
                     ID: res.data.userEntity.ID,
                     IsLogged : true,
-                    Name: res.data.userEntity.Name
+                    Name: res.data.userEntity.Name,
+                    Role: res.data.userEntity.Role
                 });
                 switch(res.data.userEntity.Role){
                     case 1:
-                        self.$router.push({name : "Management"});
+                        self.$router.push({name : "Receiver"});
                     break;
                     case 2:
                         self.$router.push({name : "Customer"});
