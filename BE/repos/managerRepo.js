@@ -5,3 +5,10 @@ exports.receiverRequest = function(req){
     VALUES ('${req.UserName}','${req.PhoneNumber}','${req.Address}','${req.Location1}','${req.Note}','${1}')`;
     return db.write(sql);
 }
+
+exports.getRequestByStatus = function(status){
+    var sql = `SELECT Id, Name, Phone, Address, Location1, Location2, Note, Status FROM request
+    WHERE Status = ${status}
+    ORDER BY Id`;
+    return db.load(sql);
+}

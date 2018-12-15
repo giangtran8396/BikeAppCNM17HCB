@@ -1,36 +1,16 @@
 var express = require('express');
 var jwt = require('jsonwebtoken');
 var bodyParser = require('body-parser');
-var userCtrl = require('./controllers/userController');
-var managerCtrl = require('./controllers/managerController');
 var cors = require('cors');
 var app = express();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
-
+var io = require('./socketServer');
+io.attach(http);
+var userCtrl = require('./controllers/userController');
+var managerCtrl = require('./controllers/managerController')(io);
+app.io = io;
 app.use(cors());
 app.use(bodyParser.json());
-
-io.on('connection', function(socket){
-	socket.on('join',function(room){
-		if(socket.room){
-			socket.leave(socket.room);
-		}
-		socket.room = room;
-		socket.join(room);
-		io.in(room).clients((err, clients) => {
-		  io.sockets.in(room).emit('listUser',clients);
-		});
-	});
-    socket.on('disconnect', function(){
-        io.in(socket.room).clients((err, clients) => {
-		  io.sockets.in(socket.room).emit('listUser',clients);
-		});
-    });
-    socket.on('clientsendMess',function(socketid,msg){
-		io.to(socketid).emit('clientreciverMess',msg);
-    });
-});
 
 var verifyAccessToken = (req, res, next) => {
     var token = req.headers['x-access-token'];

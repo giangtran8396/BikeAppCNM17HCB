@@ -2,8 +2,8 @@
     <b-navbar v-if="getUser.IsLogged" toggleable="md" type="dark" variant="success" style="color:white !important">
     <b-collapse is-nav id="nav_collapse">
     <b-navbar-nav v-if="getUser.Role == '1'">
-      <b-nav-item href="#">Nhận yêu cầu</b-nav-item>
-      <b-nav-item href="#">xác định vị trí</b-nav-item>
+      <b-nav-item @click="toReciver()" href="#">Nhận yêu cầu</b-nav-item>
+      <b-nav-item @click="toLocation()" href="#">xác định vị trí</b-nav-item>
     </b-navbar-nav>
     <!-- Right aligned nav items -->
     <b-navbar-nav class="ml-auto">
@@ -34,7 +34,13 @@ export default {
             delete_cookie();
             this.$store.dispatch('setLogged',null);
             this.$router.push({name:'Login'});
-    }
+        },
+        toReciver(){
+            this.$router.push({name:'Receiver'});
+        },
+        toLocation(){
+            this.$router.push({name:'LocationIdentifier'});
+        }
   },
   watch:{
       getUser(){

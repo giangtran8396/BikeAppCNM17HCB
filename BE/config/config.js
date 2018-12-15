@@ -1,7 +1,9 @@
 var BikeAppConfig = {};
+BikeAppConfig.Status = {};
+BikeAppConfig.App2 = {};
 
-BikeAppConfig.User = {};
+BikeAppConfig.Status.Request = 1;
 
-BikeAppConfig.User.saltRounds = 10;
+BikeAppConfig.App2.Room = 'RoomIndetifierLocation';
 
 module.exports = BikeAppConfig;
