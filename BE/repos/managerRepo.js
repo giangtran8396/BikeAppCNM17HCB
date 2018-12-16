@@ -12,3 +12,9 @@ exports.getRequestByStatus = function(status){
     ORDER BY Id`;
     return db.load(sql);
 }
+
+exports.getRequestManagement = function(){
+    var sql = `SELECT * FROM request
+    ORDER BY Id`;
+    return db.load(sql);
+}

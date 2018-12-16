@@ -38,7 +38,19 @@ router.get('/receiverRequest/:id',(req,res) => {
         });
     });
 });
-
+router.get('/requestManagement',(req,res) => {
+    //var status = +req.params.id;
+    managerRepo.getRequestManagement().then(result => {
+        res.statusCode = 200;
+        res.json(result);
+    }).catch(err => {
+        res.statusCode = 404;
+        res.json({
+            ErrorMessage : 'get faild',
+            ErrorModel : err,
+        });
+    });
+});
 
 module.exports = function(io){
     ioSocket = io;

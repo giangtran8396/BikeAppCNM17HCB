@@ -6,5 +6,8 @@ export default {
     },
     getRequest(status){
         return Api().get(`/manager/receiverRequest/${status}`);
-    }
+    },
+    getRequestManagement(){
+        return Api().get(`/manager/requestManagement`);
+    },
 }

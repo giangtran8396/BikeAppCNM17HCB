@@ -116,7 +116,7 @@ const items = [
   { isActive: true, age: 38, name: { first: 'John', last: 'Carney' } },
   { isActive: false, age: 29, name: { first: 'Dick', last: 'Dunlap' } }
 ]
-
+import service from '../api/manager'
 export default {
   data () {
     return {
@@ -161,6 +161,13 @@ export default {
       this.totalRows = filteredItems.length
       this.currentPage = 1
     }
+  },
+  created() {
+     service.getRequestManagement().then(res => {
+        console.log(res);
+    }).catch(err =>{
+        console.log(err);
+    });
   }
 }
 </script>
