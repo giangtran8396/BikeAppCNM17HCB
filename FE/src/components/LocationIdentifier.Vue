@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>{{msg}}</h1>
+        <h1 class="py-3">{{msg}}</h1>
         <b-row>
             <b-col cols="12" md="6" >
             <b-card bg-variant="light">
@@ -8,6 +8,7 @@
             <b-button type="button" 
             variant="success" 
             :disabled="isDisabled"
+            v-on:click="saveLocation2()"
             class="text-right"><font-awesome-icon icon="check" /> Xác nhận</b-button>
             </div>
             <div class="scroll-auto">
@@ -19,7 +20,7 @@
                       <div title="Card Title"
                         class="mb-2">
                         <b-row>
-                            <b-col cols="12" md="8" class="text-left pr-0"><h4 class="text-left">{{item.Name}} </h4></b-col>
+                            <b-col cols="12" md="8" class="text-left pr-0"><h5 class="text-left">{{item.Name}} </h5></b-col>
                             <b-col cols="12" md="4" class="text-right px-md-0">
                                 <span>
                                     <b-badge class="text-right" variant="info">Chưa được định vị</b-badge>
@@ -27,16 +28,16 @@
                             </b-col>
                         </b-row>
                         <b-row>
-                            <b-col cols="12" md="3" class="text-left pr-0 mw-22"><span>Điện thoại :</span></b-col>
-                            <b-col cols="12" md="9" class="text-left px-md-0"><span>{{item.Phone}}</span></b-col>
+                            <b-col cols="12" md="3" class="text-left pr-0 mw-22 font-bold-custom"><span>Điện thoại :</span></b-col>
+                            <b-col cols="12" md="9" class="text-left px-md-0 font-custom"><span>{{item.Phone}}</span></b-col>
                         </b-row>
                         <b-row>
-                            <b-col cols="12" md="3" class="text-left pr-0 mw-22"><span>Vị trí :</span></b-col>
-                            <b-col cols="12" md="9" class="text-left px-md-0"><span>{{item.Address}}</span></b-col>
+                            <b-col cols="12" md="3" class="text-left pr-0 mw-22 font-bold-custom"><span>Vị trí :</span></b-col>
+                            <b-col cols="12" md="9" class="text-left px-md-0 font-custom"><span>{{item.Address}}</span></b-col>
                         </b-row>
                         <b-row>
-                            <b-col cols="12" md="3" class="text-left pr-0 mw-22"><span>Ghi chú :</span></b-col>
-                            <b-col cols="12" md="9" class="text-left px-md-0"><span>{{item.Note}}</span></b-col>
+                            <b-col cols="12" md="3" class="text-left pr-0 mw-22 font-bold-custom"><span>Ghi chú :</span></b-col>
+                            <b-col cols="12" md="9" class="text-left px-md-0 font-custom note-italic"><span>{{item.Note}}</span></b-col>
                         </b-row>
                     </div>
                 </b-list-group-item>
@@ -84,6 +85,32 @@ export default {
                 console.log(err);
             });
         },
+        saveLocation2() {
+            var self = this;
+            if(self.selectedElement.Location2){
+                self.selectedElement.Location2 = JSON.stringify(self.selectedElement.Location2);
+                self.selectedElement.Status = config.Status.Identify;
+            }
+            service.reverseLocation(self.selectedElement).then(res => {
+                self.selectedElement = null;
+                // Clear out the old markers.
+                if(self.marker){
+                    self.marker.setMap(null);
+                }
+                self.$swal({
+                    title: 'Thông báo',
+                    text: 'Xác nhận vị trí thành công',
+                    type: 'success',
+                });            
+            }).catch(err => {
+                console.log(err);
+                self.$swal({
+                    title: 'Thông báo',
+                    text: 'Xác nhận vị trí thất bại',
+                    type: 'error',
+                });
+            });
+        },
         getItem($event){
             var self = this;
             var elements = document.querySelectorAll(".item-request");
@@ -95,6 +122,7 @@ export default {
             var id = $element.getAttribute('data-id');
             self.selectedElement = self.getItembyId(id);
             var pos = JSON.parse(self.selectedElement.Location1);
+            self.selectedElement.Location2 = pos;
             self.map.setCenter(pos);
             self.map.setZoom(17);
             // Clear out the old markers.
@@ -109,8 +137,11 @@ export default {
 				title: self.selectedElement.Name,
              });
             self.marker.addListener('dragend', function(eventMarker){
-                  console.log(eventMarker.latLng.lat());
-              });
+                self.selectedElement.Location2 = {
+                    lat: eventMarker.latLng.lat(),
+                    lng: eventMarker.latLng.lng()
+                }
+            });
         },
         getItembyId(id){
             var self = this;
@@ -170,7 +201,17 @@ export default {
         overflow-y: auto;
     }
     #receiverMap {
-    width: 100%;
-    height: 100%;
+        width: 100%;
+        height: 100%;
+    }
+    .font-bold-custom{
+        font-size: 13px;
+        font-weight: 600;
+    }
+    .font-custom{
+        font-size:13px;
+    }
+    .note-italic{
+        font-style: italic;
     }
 </style>

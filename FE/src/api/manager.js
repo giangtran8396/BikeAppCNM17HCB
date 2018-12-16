@@ -10,4 +10,7 @@ export default {
     getRequestManagement(){
         return Api().get(`/manager/requestManagement`);
     },
+    reverseLocation(model){
+        return Api().post('/manager/ReverseLocation', model); 
+    }
 }

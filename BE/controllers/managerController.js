@@ -51,6 +51,28 @@ router.get('/requestManagement',(req,res) => {
         });
     });
 });
+router.post('/ReverseLocation',(req,res) => {
+    var model = req.body || {};
+    managerRepo.updateReverseLocation(model).then(result => {
+        res.statusCode = 201;
+        res.json({
+            result
+        });
+        //socket send new list request from client
+        managerRepo.getRequestByStatus(config.Status.Request).then(data => {
+            ioSocket.sockets.in(config.App2.Room).emit('listRequestLocation',data);
+        }).catch(errGet => {
+            ioSocket.sockets.in(config.App2.Room).emit('listRequestLocation',[]);
+        });
+    }).catch(err => {
+        console.log(err);
+        res.statusCode = 404;
+        res.json({
+            ErrorMessage : 'insert faild',
+            ErrorModel : err,
+        });
+    });
+});
 
 module.exports = function(io){
     ioSocket = io;

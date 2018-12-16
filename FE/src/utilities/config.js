@@ -11,6 +11,7 @@ BikeAppConfig.GoogleMaps.DefaultLocation = {lat:  10.752033299999999, lng: 106.6
 
 //Status Request
 BikeAppConfig.Status.Request = 1;
+BikeAppConfig.Status.Identify = 2;
 //Status Request
 
 module.exports = BikeAppConfig;
