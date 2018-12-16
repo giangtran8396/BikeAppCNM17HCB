@@ -4,6 +4,7 @@
     <b-navbar-nav v-if="getUser.Role == '1'">
       <b-nav-item @click="toReciver()" href="#">Nhận yêu cầu</b-nav-item>
       <b-nav-item @click="toLocation()" href="#">xác định vị trí</b-nav-item>
+      <b-nav-item @click="toRequestManagement()" href="#">Quản lý yêu cầu</b-nav-item>
     </b-navbar-nav>
     <!-- Right aligned nav items -->
     <b-navbar-nav class="ml-auto">
@@ -40,7 +41,11 @@ export default {
         },
         toLocation(){
             this.$router.push({name:'LocationIdentifier'});
+        },
+         toRequestManagement(){
+            this.$router.push({name:'RequestManagement'});
         }
+        
   },
   watch:{
       getUser(){

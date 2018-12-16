@@ -8,6 +8,7 @@ import Driver from '@/components/Driver'
 import Customer from '@/components/Customer'
 import Receiver from '@/components/Receiver'
 import LocationIdentifier from '@/components/LocationIdentifier'
+import RequestManagement from '@/components/RequestManagement'
 
 Vue.use(Router);
 Vue.use(VueSweetalert2);
@@ -46,6 +47,12 @@ const router = new Router({
       path: '/Customer',
       name: 'Customer',
       component: Customer,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/RequestManagement',
+      name: 'RequestManagement',
+      component: RequestManagement,
       meta: { requiresAuth: true }
     }
   ]
