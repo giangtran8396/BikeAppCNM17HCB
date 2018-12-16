@@ -1,9 +1,9 @@
--- phpMyAdmin SQL Dump
+	-- phpMyAdmin SQL Dump
 -- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 08, 2018 lúc 08:33 AM
+-- Thời gian đã tạo: Th12 16, 2018 lúc 11:47 AM
 -- Phiên bản máy phục vụ: 10.1.36-MariaDB
 -- Phiên bản PHP: 7.2.10
 
@@ -36,15 +36,23 @@ CREATE TABLE `request` (
   `Location1` varchar(250) COLLATE utf8_vietnamese_ci DEFAULT NULL,
   `Location2` varchar(250) COLLATE utf8_vietnamese_ci DEFAULT NULL,
   `Note` varchar(500) COLLATE utf8_vietnamese_ci DEFAULT NULL,
-  `Status` int(11) NOT NULL
+  `Status` int(11) NOT NULL,
+  `CreateDate` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `request`
 --
 
-INSERT INTO `request` (`Id`, `Name`, `Phone`, `Address`, `Location1`, `Location2`, `Note`, `Status`) VALUES
-(1, 'giang', '0123456', '227 nvc q5', '{\"lat\":10.76142127010728,\"lng\":106.68046755}', NULL, 'note note note', 1);
+INSERT INTO `request` (`Id`, `Name`, `Phone`, `Address`, `Location1`, `Location2`, `Note`, `Status`, `CreateDate`) VALUES
+(1, 'giang', '0123456', '227 nvc q5', '{\"lat\":10.76142127010728,\"lng\":106.68046755}', NULL, 'note note note', 1, '2018-12-16 17:44:44'),
+(2, 'test', '090344455', '227 nvc q5', '{\"lat\":10.76142127010728,\"lng\":106.68046755}', NULL, 'abc', 1, '2018-12-16 17:44:44'),
+(3, 'test1', '090232323', '227 nvc q5', '{\"lat\":10.76142127010728,\"lng\":106.68046755}', NULL, '234324242', 1, '2018-12-16 17:44:44'),
+(4, 'test2', '090344455', '227 nvc q5 / khtn', '{\"lat\":10.76147392010728,\"lng\":106.68085337010734}', NULL, 'test test test test', 1, '2018-12-16 17:44:44'),
+(5, 'test4', '0404040404', '57 hung phu P8 ', '{\"lat\":10.74866967010728,\"lng\":106.67940982010737}', NULL, '44444444', 1, '2018-12-16 17:44:44'),
+(6, 'test5', '123123', '1 hung phu p8 q8', '{\"lat\":10.74890147010728,\"lng\":106.68093387010731}', NULL, '123123', 1, '2018-12-16 17:44:44'),
+(7, 'test 6', '090344455', '57 pham hung ', '{\"lat\":10.7904449197085,\"lng\":106.69708461970845}', NULL, 'nope', 1, '2018-12-16 17:44:44'),
+(8, 'test 7', '123123', '100 phan xich long Q11', '{\"lat\":10.75433437010728,\"lng\":106.64512057010734}', NULL, '123123', 1, '2018-12-16 17:44:44');
 
 -- --------------------------------------------------------
 
@@ -106,7 +114,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT cho bảng `request`
 --
 ALTER TABLE `request`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT cho bảng `user`
