@@ -14,7 +14,7 @@ exports.getRequestByStatus = function(status){
 }
 
 exports.getRequestManagement = function(){
-    var sql = `SELECT * FROM request
+    var sql = `SELECT Name,Phone,Status FROM request
     ORDER BY Id`;
     return db.load(sql);
 }

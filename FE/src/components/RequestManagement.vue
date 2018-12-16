@@ -1,5 +1,8 @@
 <template>
    <div>
+     <h2 style="margin-top:10px;margin-bottom: 10px">
+       QUẢN LÝ YÊU CẦU
+     </h2>
         <b-container fluid>
             <!-- User Interface controls -->
             <b-row>
@@ -62,10 +65,10 @@
             <template slot="actions" slot-scope="row">
                 <!-- We use @click.stop here to prevent a 'row-clicked' event from also happening -->
                 <b-button size="sm" @click.stop="info(row.item, row.index, $event.target)" class="mr-1">
-                Info modal
+                Bản đồ
                 </b-button>
                 <b-button size="sm" @click.stop="row.toggleDetails">
-                {{ row.detailsShowing ? 'Hide' : 'Show' }} Details
+                {{ row.detailsShowing ? 'Ẩn' : 'Hiện' }} Thông tin tài xế
                 </b-button>
             </template>
             <template slot="row-details" slot-scope="row">
@@ -117,15 +120,20 @@ const items = [
   { isActive: false, age: 29, name: { first: 'Dick', last: 'Dunlap' } }
 ]
 import service from '../api/manager'
+var s = service.getRequestManagement().then(res => {
+
+        return res;
+    });
+  console.log(s);
 export default {
   data () {
     return {
-      items: items,
+      items: [],
       fields: [
-        { key: 'name', label: 'Person Full name', sortable: true, sortDirection: 'desc' },
-        { key: 'age', label: 'Person age', sortable: true, 'class': 'text-center' },
-        { key: 'isActive', label: 'is Active' },
-        { key: 'actions', label: 'Actions' }
+        { key: 'Name', label: 'Tên người dùng', sortable: true, sortDirection: 'desc' },
+        { key: 'Phone', label: 'Số điện thoại', sortable: true, 'class': 'text-center' },
+        { key: 'Status', label: 'Trạng thái' }
+        //{ key: 'actions', label: 'Hành động' }
       ],
       currentPage: 1,
       perPage: 5,
@@ -163,8 +171,10 @@ export default {
     }
   },
   created() {
+      var self = this;
      service.getRequestManagement().then(res => {
-        console.log(res);
+       self.items = res.data;
+        console.log(self.items);
     }).catch(err =>{
         console.log(err);
     });
