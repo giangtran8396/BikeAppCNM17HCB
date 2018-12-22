@@ -1,10 +1,11 @@
 <template>
     <div>
-        <h1 class="py-3">{{msg}}</h1>
-        <b-row>
+        <h2 class="py-3" style="color:#777">{{msg}}</h2>
+        <b-row class="mb-5">
             <b-col cols="12" md="6" >
-            <b-card bg-variant="light">
-            <div class="text-right py-1">
+            <fieldset class="scheduler-border">
+            <legend class="scheduler-border" style="color:#777777e7">Danh sách yêu cầu</legend>
+            <div class="text-right py-2">
             <b-button type="button" 
             variant="success" 
             :disabled="isDisabled"
@@ -20,7 +21,7 @@
                       <div title="Card Title"
                         class="mb-2">
                         <b-row>
-                            <b-col cols="12" md="8" class="text-left pr-0"><h5 class="text-left">{{item.Name}} </h5></b-col>
+                            <b-col cols="12" md="8" class="text-left pr-0"><h5 class="text-left mb-1" style="color:#777">{{item.Name}} </h5></b-col>
                             <b-col cols="12" md="4" class="text-right px-md-0">
                                 <span>
                                     <b-badge class="text-right" variant="info">Chưa được định vị</b-badge>
@@ -42,13 +43,13 @@
                     </div>
                 </b-list-group-item>
             </b-list-group>
-            </div>                
-            </b-card>
+            </div>
+        </fieldset>
             </b-col>
             <b-col cols="12" md="6">
-                <div id="receiverMap">
-
-                </div>
+                    <b-card id="receiverMap" class="mt-3">
+                
+                    </b-card>                        
             </b-col>
         </b-row>
     </div>
@@ -202,7 +203,7 @@ export default {
     }
     #receiverMap {
         width: 100%;
-        height: 100%;
+        height: 97%;
     }
     .font-bold-custom{
         font-size: 13px;
@@ -210,8 +211,22 @@ export default {
     }
     .font-custom{
         font-size:13px;
+        color:#777;
     }
     .note-italic{
         font-style: italic;
+    }
+    fieldset.scheduler-border {
+        border: 1px groove #dddddda1 !important;
+        padding: 0 1.4em 1.4em 1.4em !important;
+        /* margin: 0 0 1.5em 0 !important; */
+        -webkit-box-shadow:  0px 0px 0px 0px #000;
+                box-shadow:  0px 0px 0px 0px #000;
+    }
+
+    legend.scheduler-border {
+        width:inherit; /* Or auto */
+        padding:0 10px; /* To give a bit of padding on the left and right */
+        border-bottom:none;
     }
 </style>
