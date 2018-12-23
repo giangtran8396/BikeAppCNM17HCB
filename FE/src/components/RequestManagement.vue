@@ -65,10 +65,10 @@
             <template slot="actions" slot-scope="row">
                 <!-- We use @click.stop here to prevent a 'row-clicked' event from also happening -->
                 <b-button size="sm" @click.stop="info(row.item, row.index, $event.target)" class="mr-1">
-                Bản đồ
+                Thông tin tài xế
                 </b-button>
                 <b-button size="sm" @click.stop="row.toggleDetails">
-                {{ row.detailsShowing ? 'Ẩn' : 'Hiện' }} Thông tin tài xế
+                {{ row.detailsShowing ? 'Ẩn' : 'Hiện' }} Bản đồ
                 </b-button>
             </template>
             <template slot="row-details" slot-scope="row">
@@ -88,7 +88,9 @@
 
             <!-- Info modal -->
             <b-modal id="modalInfo" @hide="resetModal" :title="modalInfo.title" ok-only>
-            <pre>{{ modalInfo.content }}</pre>
+            <pre>{{ modalInfo.content.Name }} </pre>
+            <pre>{{ modalInfo.content.ID }} </pre>
+            <div id="driverMap"></div>
             </b-modal>
 
         </b-container>
@@ -120,6 +122,8 @@ const items = [
   { isActive: false, age: 29, name: { first: 'Dick', last: 'Dunlap' } }
 ]
 import service from '../api/manager'
+import config from '../utilities/config'
+import GoogleMapsLoader from 'google-maps'
 var s = service.getRequestManagement().then(res => {
 
         return res;
@@ -128,12 +132,15 @@ var s = service.getRequestManagement().then(res => {
 export default {
   data () {
     return {
+      map: null,
       items: [],
       fields: [
+        { key: 'Id', label: 'Mã yêu cầu' },
         { key: 'Name', label: 'Tên người dùng', sortable: true, sortDirection: 'desc' },
         { key: 'Phone', label: 'Số điện thoại', sortable: true, 'class': 'text-center' },
-        { key: 'Status', label: 'Trạng thái' }
-        //{ key: 'actions', label: 'Hành động' }
+        { key: 'Status', label: 'Trạng thái' },
+        { key: 'Address', label: 'Địa chỉ' },
+        { key: 'actions', label: 'Hành động' }
       ],
       currentPage: 1,
       perPage: 5,
@@ -154,11 +161,16 @@ export default {
         .map(f => { return { text: f.label, value: f.key } })
     }
   },
+  
   methods: {
     info (item, index, button) {
-      this.modalInfo.title = `Row index: ${index}`
-      this.modalInfo.content = JSON.stringify(item, null, 2)
-      this.$root.$emit('bv::show::modal', 'modalInfo', button)
+      var self = this;
+      var abc = service.locationdrive(item.Id).then(res => {
+        console.log(res);
+        self.modalInfo.title = `Thông tin tài xế`
+        self.modalInfo.content = res.data[0];
+        self.$root.$emit('bv::show::modal', 'modalInfo', button);
+      });
     },
     resetModal () {
       this.modalInfo.title = ''
@@ -172,6 +184,16 @@ export default {
   },
   created() {
       var self = this;
+      GoogleMapsLoader.KEY = config.GoogleMaps.Key;
+        GoogleMapsLoader.VERSION = config.GoogleMaps.Version;
+        GoogleMapsLoader.LANGUAGE = config.GoogleMaps.Language;
+        GoogleMapsLoader.LIBRARIES = config.GoogleMaps.Libraies;
+        GoogleMapsLoader.load(function(google){
+            self.map = new google.maps.Map(document.getElementById('driverMap'), {
+            center: {lat: -34.397, lng: 150.644},
+            zoom: 8
+            });
+        });
      service.getRequestManagement().then(res => {
        self.items = res.data;
         console.log(self.items);
@@ -182,5 +204,8 @@ export default {
 }
 </script>
 <style>
-
+#driverMap {
+    width: 100%;
+    height: 300px;
+    }
 </style>

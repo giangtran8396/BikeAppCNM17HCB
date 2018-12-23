@@ -74,7 +74,26 @@ router.post('/ReverseLocation',(req,res) => {
     });
 });
 
+
+router.get('/locationdrive/:id',(req,res) => {
+    var id = +req.params.id;
+    managerRepo.getDriverRequestByRequestId(id).then(result => {
+        res.statusCode = 200;
+        res.json(result);
+    }).catch(err => {
+        res.statusCode = 404;
+        res.json({
+            ErrorMessage : 'get faild',
+            ErrorModel : err,
+        });
+    });
+});
+
+
+
 module.exports = function(io){
     ioSocket = io;
     return router;
 }
+
+

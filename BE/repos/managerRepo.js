@@ -22,7 +22,18 @@ exports.updateReverseLocation = function(req){
 }
 
 exports.getRequestManagement = function(){
-    var sql = `SELECT Name,Phone,Status FROM request
+    var sql = `SELECT Id, Name,Phone,Status,Address FROM request
+    WHERE Status != 1
     ORDER BY Id`;
+    return db.load(sql);
+}
+
+
+
+exports.getDriverRequestByRequestId = function(id){
+    var sql = `SELECT user.ID,user.Name,driver.Location FROM requestdriver 
+    INNER JOIN driver ON driver.ID = requestdriver.IDDriver
+    INNER JOIN user ON user.ID = driver.IDUser
+    WHERE requestdriver.IDRequest = ${id} AND user.Role = 3`;
     return db.load(sql);
 }

@@ -12,5 +12,8 @@ export default {
     },
     reverseLocation(model){
         return Api().post('/manager/ReverseLocation', model); 
+    },
+    locationdrive(id){
+        return Api().get(`/manager/locationdrive/${id}`); 
     }
 }
