@@ -1,11 +1,11 @@
-	-- phpMyAdmin SQL Dump
+-- phpMyAdmin SQL Dump
 -- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th12 16, 2018 lúc 11:47 AM
--- Phiên bản máy phục vụ: 10.1.36-MariaDB
--- Phiên bản PHP: 7.2.10
+-- Thời gian đã tạo: Th12 23, 2018 lúc 09:45 AM
+-- Phiên bản máy phục vụ: 10.1.37-MariaDB
+-- Phiên bản PHP: 7.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -21,6 +21,28 @@ SET time_zone = "+00:00";
 --
 -- Cơ sở dữ liệu: `bikeapp`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `driver`
+--
+
+CREATE TABLE `driver` (
+  `ID` int(11) NOT NULL,
+  `Location` varchar(250) COLLATE utf8_vietnamese_ci NOT NULL,
+  `Status` int(11) NOT NULL,
+  `IDUser` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `driver`
+--
+
+INSERT INTO `driver` (`ID`, `Location`, `Status`, `IDUser`) VALUES
+(1, '{\"lat\":10.76142127010728,\"lng\":106.68046755}', 1, 19),
+(2, '{\"lat\":10.73552967010728,\"lng\":106.67723517010722}', 1, 20),
+(3, '{\"lat\":10.76112907010728,\"lng\":106.68089352010725}', 1, 21);
 
 -- --------------------------------------------------------
 
@@ -45,14 +67,30 @@ CREATE TABLE `request` (
 --
 
 INSERT INTO `request` (`Id`, `Name`, `Phone`, `Address`, `Location1`, `Location2`, `Note`, `Status`, `CreateDate`) VALUES
-(1, 'giang', '0123456', '227 nvc q5', '{\"lat\":10.76142127010728,\"lng\":106.68046755}', NULL, 'note note note', 1, '2018-12-16 17:44:44'),
-(2, 'test', '090344455', '227 nvc q5', '{\"lat\":10.76142127010728,\"lng\":106.68046755}', NULL, 'abc', 1, '2018-12-16 17:44:44'),
-(3, 'test1', '090232323', '227 nvc q5', '{\"lat\":10.76142127010728,\"lng\":106.68046755}', NULL, '234324242', 1, '2018-12-16 17:44:44'),
-(4, 'test2', '090344455', '227 nvc q5 / khtn', '{\"lat\":10.76147392010728,\"lng\":106.68085337010734}', NULL, 'test test test test', 1, '2018-12-16 17:44:44'),
-(5, 'test4', '0404040404', '57 hung phu P8 ', '{\"lat\":10.74866967010728,\"lng\":106.67940982010737}', NULL, '44444444', 1, '2018-12-16 17:44:44'),
-(6, 'test5', '123123', '1 hung phu p8 q8', '{\"lat\":10.74890147010728,\"lng\":106.68093387010731}', NULL, '123123', 1, '2018-12-16 17:44:44'),
-(7, 'test 6', '090344455', '57 pham hung ', '{\"lat\":10.7904449197085,\"lng\":106.69708461970845}', NULL, 'nope', 1, '2018-12-16 17:44:44'),
-(8, 'test 7', '123123', '100 phan xich long Q11', '{\"lat\":10.75433437010728,\"lng\":106.64512057010734}', NULL, '123123', 1, '2018-12-16 17:44:44');
+(1, 'giang', '0123456', '227 nvc q5', '{\"lat\":10.76142127010728,\"lng\":106.68046755}', NULL, 'note note note', 1, NULL),
+(2, 'tien', '1231231123', 'duong 232 cao lo p4 q8', '{\"lat\":10.73552967010728,\"lng\":106.67723517010722}', NULL, 'note note', 1, NULL),
+(3, 'test', '`12', '227 nvc q5 ', '{\"lat\":10.76112907010728,\"lng\":106.68089352010725}', NULL, '`12', 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `requestdriver`
+--
+
+CREATE TABLE `requestdriver` (
+  `ID` int(11) NOT NULL,
+  `IDDriver` int(11) NOT NULL,
+  `IDRequest` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_vietnamese_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `requestdriver`
+--
+
+INSERT INTO `requestdriver` (`ID`, `IDDriver`, `IDRequest`) VALUES
+(1, 1, 1),
+(2, 2, 2),
+(3, 3, 3);
 
 -- --------------------------------------------------------
 
@@ -95,10 +133,22 @@ INSERT INTO `user` (`ID`, `UserName`, `Password`, `Name`, `Role`) VALUES
 --
 
 --
+-- Chỉ mục cho bảng `driver`
+--
+ALTER TABLE `driver`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Chỉ mục cho bảng `request`
 --
 ALTER TABLE `request`
   ADD PRIMARY KEY (`Id`);
+
+--
+-- Chỉ mục cho bảng `requestdriver`
+--
+ALTER TABLE `requestdriver`
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Chỉ mục cho bảng `user`
@@ -111,10 +161,22 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT cho bảng `driver`
+--
+ALTER TABLE `driver`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT cho bảng `request`
 --
 ALTER TABLE `request`
-  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `Id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT cho bảng `requestdriver`
+--
+ALTER TABLE `requestdriver`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT cho bảng `user`
