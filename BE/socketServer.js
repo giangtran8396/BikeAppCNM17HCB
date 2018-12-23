@@ -14,7 +14,21 @@ io.on('connection', function(socket){
         }).catch(err => {
             io.to(socket.id).emit('listRequestLocation',[]);
         });
-	});
+    });
+    
+    socket.on('joinApp3',function(){
+		if(socket.room){
+			socket.leave(socket.room);
+		}
+		socket.room = config.App3.Room;
+        socket.join(config.App3.Room);
+        managerRepo.getRequestManagement().then(result => {
+            io.to(socket.id).emit('listApp3',result);
+        }).catch(err => {
+            io.to(socket.id).emit('listApp3',[]);
+        });
+    });
+
     socket.on('disconnect', function(){
         io.in(socket.room).clients((err, clients) => {
 		  io.sockets.in(socket.room).emit('listUser',clients);

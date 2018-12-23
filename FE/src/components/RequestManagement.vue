@@ -133,6 +133,7 @@ export default {
   data () {
     return {
       map: null,
+      marker: null,
       items: [],
       fields: [
         { key: 'Id', label: 'Mã yêu cầu' },
@@ -169,7 +170,20 @@ export default {
         console.log(res);
         self.modalInfo.title = `Thông tin tài xế`
         self.modalInfo.content = res.data[0];
+        var location = JSON.parse(res.data[0].Location);
+        if(self.marker){
+          self.marker.setMap(null);
+        }
+        self.marker = new google.maps.Marker({
+                        position: location,
+                        map: self.map,
+                        title: "Vị trí của tài xế : " + res.data[0].Name,
+                    });
+        self.map.setCenter(location);         
+        self.map.setZoom(17);         
         self.$root.$emit('bv::show::modal', 'modalInfo', button);
+
+        
       });
     },
     resetModal () {
@@ -180,6 +194,12 @@ export default {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length
       this.currentPage = 1
+    }
+  },
+  sockets:{
+    listApp3(data) {
+          var self = this;
+          self.items = data;
     }
   },
   created() {
@@ -194,12 +214,13 @@ export default {
             zoom: 8
             });
         });
-     service.getRequestManagement().then(res => {
+    service.getRequestManagement().then(res => {
        self.items = res.data;
         console.log(self.items);
     }).catch(err =>{
         console.log(err);
     });
+    this.$socket.emit('joinApp3');   
   }
 }
 </script>
