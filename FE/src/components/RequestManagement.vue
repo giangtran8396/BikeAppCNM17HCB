@@ -67,9 +67,9 @@
                 <b-button size="sm" @click.stop="info(row.item, row.index, $event.target)" class="mr-1">
                 Thông tin tài xế
                 </b-button>
-                <b-button size="sm" @click.stop="row.toggleDetails">
+                <!-- <b-button size="sm" @click.stop="row.toggleDetails">
                 {{ row.detailsShowing ? 'Ẩn' : 'Hiện' }} Bản đồ
-                </b-button>
+                </b-button> -->
             </template>
             <template slot="row-details" slot-scope="row">
                 <b-card>
@@ -88,8 +88,8 @@
 
             <!-- Info modal -->
             <b-modal id="modalInfo" @hide="resetModal" :title="modalInfo.title" ok-only>
-            <pre>{{ modalInfo.content.Name }} </pre>
-            <pre>{{ modalInfo.content.ID }} </pre>
+            <pre>Tên tài xế : {{ modalInfo.content.Name }} </pre>
+            <pre>Điện thoại: {{ modalInfo.content.Phone }} </pre>
             <div id="driverMap"></div>
             </b-modal>
 

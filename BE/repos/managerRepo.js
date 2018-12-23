@@ -31,9 +31,10 @@ exports.getRequestManagement = function(){
 
 
 exports.getDriverRequestByRequestId = function(id){
-    var sql = `SELECT user.ID,user.Name,driver.Location FROM requestdriver 
+    var sql = `SELECT user.ID,user.Name,driver.Location,request.Phone FROM requestdriver 
     INNER JOIN driver ON driver.ID = requestdriver.IDDriver
     INNER JOIN user ON user.ID = driver.IDUser
+    INNER JOIN request ON request.Id = requestdriver.IDRequest
     WHERE requestdriver.IDRequest = ${id} AND user.Role = 3`;
     return db.load(sql);
 }
