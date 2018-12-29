@@ -159,9 +159,6 @@ export default {
             self.listRequest = data;
         }
     },
-    created(){
-        this.$socket.emit('joinApp2');        
-    },
     mounted(){
     var self = this;
         GoogleMapsLoader.KEY = config.GoogleMaps.Key;
@@ -183,7 +180,8 @@ export default {
                 self.map.set(pos);
             });
         }
-        });    
+        });
+        this.$socket.emit('joinApp2');        
     }
 }
 </script>

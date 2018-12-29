@@ -64,6 +64,12 @@ router.post('/ReverseLocation',(req,res) => {
         }).catch(errGet => {
             ioSocket.sockets.in(config.App2.Room).emit('listRequestLocation',[]);
         });
+        //socket send new list for app3
+        managerRepo.getRequestManagement().then(dataApp3 => {
+            ioSocket.sockets.in(config.App3.Room).emit('listApp3',dataApp3);
+        }).catch(errApp3 => {
+            ioSocket.sockets.in(config.App3.Room).emit('listApp3',[]);
+        });
     }).catch(err => {
         console.log(err);
         res.statusCode = 404;

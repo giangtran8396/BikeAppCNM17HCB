@@ -127,6 +127,7 @@ export default {
         }
     },
     mounted(){
+        this.$socket.emit('joinApp1');        
         var self = this;
         GoogleMapsLoader.KEY = config.GoogleMaps.Key;
         GoogleMapsLoader.VERSION = config.GoogleMaps.Version;
@@ -154,7 +155,6 @@ export default {
         self.map.addListener('bounds_changed', function() {
           searchBox.setBounds(self.map.getBounds());
         });
-
         var markers = [];
         // Listen for the event fired when the user selects a prediction and retrieve
         // more details for that place.
