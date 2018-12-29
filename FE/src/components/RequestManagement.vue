@@ -202,7 +202,7 @@ export default {
           self.items = data;
     }
   },
-  created() {
+  mounted() {
       var self = this;
       GoogleMapsLoader.KEY = config.GoogleMaps.Key;
         GoogleMapsLoader.VERSION = config.GoogleMaps.Version;
@@ -214,12 +214,6 @@ export default {
             zoom: 8
             });
         });
-    service.getRequestManagement().then(res => {
-       self.items = res.data;
-        console.log(self.items);
-    }).catch(err =>{
-        console.log(err);
-    });
     this.$socket.emit('joinApp3');   
   }
 }

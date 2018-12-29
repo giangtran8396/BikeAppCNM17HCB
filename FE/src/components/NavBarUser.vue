@@ -13,7 +13,7 @@
         <template slot="button-content">
           <em>{{getUser.Name}}</em>
         </template>
-        <b-dropdown-item href="javascript:;" v-on:click="logout()">Signout</b-dropdown-item>
+        <b-dropdown-item href="javascript:;" v-on:click="logout()">Thoát</b-dropdown-item>
       </b-nav-item-dropdown>
     </b-navbar-nav>
   </b-collapse>
@@ -86,5 +86,10 @@ export default {
 <style>
 .navbar-dark .navbar-nav .nav-link{
   color: rgb(255, 255, 255);
+}
+@media (max-width: 767px) {
+    #nav_collapse{
+        display: block !important;
+    }
 }
 </style>
