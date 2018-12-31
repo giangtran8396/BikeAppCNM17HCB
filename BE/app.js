@@ -4,15 +4,16 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var app = express();
 var http = require('http').Server(app);
-var io = require('./socketServer');
+var io = require('./socketServer').io;
+var ioRequest = require('./socketServer').request;
 io.attach(http);
+ioRequest();
 var userCtrl = require('./controllers/userController');
 var managerCtrl = require('./controllers/managerController')(io);
 var driverCtrl = require('./controllers/driverController')(io);
 app.io = io;
 app.use(cors());
 app.use(bodyParser.json());
-
 var verifyAccessToken = (req, res, next) => {
     var token = req.headers['x-access-token'];
     if (token) {

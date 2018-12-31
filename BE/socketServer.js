@@ -43,7 +43,6 @@ io.on('connection', function(socket){
 			socket.leave(socket.room);
 		}
     });
-
     socket.on('joinApp4',function(id){
 		if(socket.room){
 			socket.leave(config.App4.Room);
@@ -51,33 +50,24 @@ io.on('connection', function(socket){
         socket.room = config.App4.Room;
         socket.idDriver = id;
         socket.join(config.App4.Room);
-        var job = schedule.scheduleJob('*/10 * * * * *', function () {
-            var model1 = {
-                idDriver: 0,
-                min: 0,
-            };
-            driverRepo.getRequest(2).then(dataApp4 => {
-                driverRepo.getDriver().then(result=>{
-                    var pos1 = JSON.parse(dataApp4[0].Location1)
-                    result.forEach(element => {
-                        var pos2 = JSON.parse(element.Location)
-                        if (model1.min == 0 || model1.min > haversine(pos1,pos2))
-                            {
-                                model1.idDriver = element.IDUser;
-                                model1.min = haversine(pos1,pos2)
-                            }        
-                    }) 
-                    if (socket.idDriver == model1.idDriver) {
-                        io.to(socket.id).emit('listApp4',dataApp4);
-                    }
-                })
-                }).catch(errApp4 => {
-                    io.to(socket.id).emit('listApp4',[]);
-                });
+        var check = 0;
+        listDriverClient.forEach(function(element){
+            if(element.idDriver == socket.idDriver)
+            {
+                check = 1;
+                element.idRoom = socket.id
+            }
         })
+        if (check == 0){
+            listDriverClient.push({idDriver: socket.idDriver,idRoom:socket.id})
+        }
     });
-
     socket.on('disconnect', function(){
+        listDriverClient.forEach(function(element){
+            if(element.idDriver == socket.idDriver){
+                listDriverClient.pop(element);
+            }
+        })
         io.in(socket.room).clients((err, clients) => {
 		  io.sockets.in(socket.room).emit('listUser',clients);
         });
@@ -86,7 +76,78 @@ io.on('connection', function(socket){
 		}
     });
 });
-
+var countRequest = 0;
+var listDriverClient = [];
+var listDriver = [];
+function request(){
+    var job = schedule.scheduleJob('*/5 * * * * *', function () {
+        var model1 = {
+            idDriver: 0,
+            min: 0,
+        };
+        driverRepo.getRequest(2).then(dataApp4 => {
+            if(dataApp4.length > 0)
+            {
+                if(countRequest == config.MaxRequest){
+                    listDriver = [];
+                    var model = {
+                        Id: dataApp4[0].Id,
+                        Status: 5
+                    };  
+                    driverRepo.updateStatusRequest(model).then(result =>{
+                        managerRepo.getRequestManagement().then(dataApp3 => {
+                            io.sockets.in(config.App3.Room).emit('listApp3',dataApp3);
+                            }).catch(errApp3 => {
+                                io.sockets.in(config.App3.Room).emit('listApp3',[]);
+                            });
+                        })
+                }
+                driverRepo.getDriver().then(result=>{
+                    if(result.length > 0)
+                    {   
+                        result.forEach(element => { 
+                            var checkDriver = 0;
+                            listDriver.forEach(element2 => {
+                                if(element.IDUser == element2.idDriver){
+                                    checkDriver = 1;
+                                    return;
+                                }
+                            });                  
+                            if ( checkDriver == 0){
+                                var pos1 = JSON.parse(dataApp4[0].Location1)
+                                var pos2 = JSON.parse(element.Location)
+                                if (model1.min == 0 || model1.min > haversine(pos1,pos2))
+                                {
+                                    model1.idDriver = element.IDUser;
+                                    model1.min = haversine(pos1,pos2)
+                                }        
+                            }
+                        }) 
+                    if(model1.min != 0){
+                        listDriverClient.forEach(element =>{
+                            if(element.idDriver == model1.idDriver)
+                            {                            
+                                listDriver.push({idDriver: model1.idDriver})
+                                io.to(element.idRoom).emit('listApp4',dataApp4);
+                                return;
+                            }
+                        })
+                        }
+                }
+                    
+                })       
+            countRequest = countRequest + 1;
+            }
+            }).catch(errApp4 => {
+                listDriverClient.forEach(function(element){
+                    if(element.idDriver == model1.idDriver)
+                    {  
+                        io.to(element.idRoom).emit('listApp4',[]);
+                    }
+                })
+            }); 
+    })
+}
 var rad = function(x) {
     return x * Math.PI / 180;
 };
@@ -101,4 +162,5 @@ function haversine(pos1,pos2){
     var d = R * c;
     return d
 };
-module.exports = io;
+module.exports.io = io;
+module.exports.request = request;

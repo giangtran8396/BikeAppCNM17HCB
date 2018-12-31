@@ -10,4 +10,5 @@ BikeAppConfig.App2.Room = 'RoomIndetifierLocation';
 BikeAppConfig.App3.Room = 'RoomRequestManagement';
 BikeAppConfig.App4.Room = 'RoomDriverManagement';
 
+BikeAppConfig.MaxRequest = 5;
 module.exports = BikeAppConfig;
