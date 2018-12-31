@@ -80,7 +80,7 @@ var countRequest = 0;
 var listDriverClient = [];
 var listDriver = [];
 function request(){
-    var job = schedule.scheduleJob('*/5 * * * * *', function () {
+    var job = schedule.scheduleJob('*/12 * * * * *', function () {
         var model1 = {
             idDriver: 0,
             min: 0,
