@@ -1,25 +1,21 @@
 <template>
     <div>
         <h1>{{msg}}</h1>
+            <b-modal id="modalInfo" @hide="resetModal" :title="'123'" @ok="handleOk">
+            <pre>Thông tin khách hàng : {{modalInfo.content.second}} </pre>
+            <pre>Điện thoại: </pre>
+            <pre>Địa chỉ: </pre>
+            </b-modal>
         <b-row>
             <b-col cols="12" md="12"  >
                 <b-row>
                     <b-col cols="6" md="3">
                         <b-form-group class="pt-3">
                             <b-button type="button" 
-                                @click="confirm()" 
-                                variant="success" 
-                                class="w-100"
-                                id="confirmBtn">Xác nhận</b-button>                                                    
-                        </b-form-group>
-                    </b-col>
-                    <b-col cols="6" md="3">
-                        <b-form-group class="pt-3">
-                            <b-button type="button" 
                                 @click="changStatus()" 
                                 variant="success" 
                                 class="w-100"
-                                id="statusBtn">ON/OFF</b-button>                                                    
+                                id="statusBtn">{{status}}</b-button>                                                    
                         </b-form-group>
                     </b-col>
                 </b-row>    
@@ -45,7 +41,6 @@
                 </b-row>   
             </b-col>
             <b-col cols="12" md="12" id="driverMap" >
-            
             </b-col>
         </b-row>
     </div>
@@ -53,24 +48,40 @@
 <script>
 import config from '../utilities/config'
 import GoogleMapsLoader from 'google-maps'
-import service from '../api/manager'
+import service from '../api/driver'
+import {getCookieToken} from '@/helpers/helper'
 export default {
     name :"driver",
     data() {
         return {
             msg: 'Tài xế',
-            disable: self.disabled = true
+            modalInfo: { title: '', content: '' },
+            status: 'Waiting',
         }
     },
     methods: {
-        changStatus(){
-            if( self.disabled == true){
-                self.disabled = false;           
-                self.confirmBtn.disabled = false;
-           }else{
-                self.disabled = true;
-                self.confirmBtn.disabled = true;
-           }
+        handleOk (evt) {
+            confirm()
+        },
+        changStatus(){   
+            var self = this;         
+            if(self.status == "ON"){
+                var model = {
+                    Id: self.Id,
+                    Status: 0
+                };  
+                self.status = "OFF";
+                service.updatestatusdriver(model) 
+            }
+            else{
+                var model = {
+                    Id: self.Id,
+                    Status: 1
+                };  
+                self.status = "ON";
+                service.updatestatusdriver(model) 
+            } 
+           
         },
         confirm() {
         var self = this;    
@@ -102,7 +113,11 @@ export default {
             var self = this;
             self.confirmBtn.disabled = true;
             self.startBtn.disabled = true;
-            self.endBtn.disabled = false;
+            self.endBtn.disabled = false;   
+            self.$root.$emit('bv::show::modal', 'modalInfo');
+            setTimeout(function(){
+                self.$root.$emit('bv::hide::modal', 'modalInfo');
+            }, 10000);
         },
         end(){
             var self = this;
@@ -112,14 +127,38 @@ export default {
             self.map.setCenter(self.pos);
             self.map.setZoom(18)
         },
+        resetModal () {
+            this.modalInfo.title = ''
+            this.modalInfo.content = ''
+        },
+    },
+    sockets:{
+        listApp4(data) {
+            console.log(data)
+            var self = this;
+            self.items = data;
+        }
     },
     mounted(){
         var self = this;
-        self.confirmBtn = document.getElementById("confirmBtn");
+        var _cookie = getCookieToken();
+        if(_cookie) {
+            self.Id = _cookie.ID
+        }
+        var model = {
+            Id: self.Id,
+        }
+        self.statusBtn = document.getElementById("statusBtn");
+        service.getStatusDriver(model).then(result =>{
+            if(result.data[0].Status == 1){
+                self.status = "OFF"
+            }
+            else{
+                self.status = "ON"
+            }
+        })
         self.startBtn = document.getElementById("startBtn");
         self.endBtn = document.getElementById("endBtn");
-        self.statusBtn = document.getElementById("statusBtn");
-        self.confirmBtn.disabled = true;
         self.startBtn.disabled = true;
         self.endBtn.disabled = true;
         var mapDiv = document.getElementById('driverMap');
@@ -137,7 +176,12 @@ export default {
                     self.map = new google.maps.Map(mapDiv, {
                         center: {lat: self.pos.lat, lng: self.pos.lng},
                         zoom: 18
-                        });    
+                        });   
+                    var model = {
+                        Id: self.Id,
+                        Location: JSON.stringify(self.pos)
+                    }
+                    service.updatelocationdrive(model)  
                     var gMarketConfig = new google.maps.Marker({
                         position: self.pos,
                         map: self.map,
@@ -179,6 +223,11 @@ export default {
                                 lat: pos1.lat(),
                                 lng: pos1.lng()
                             };    
+                            var model = {
+                                Id: self.Id,
+                                Location: JSON.stringify(self.pos)
+                            }
+                            service.updatelocationdrive(model)  
                             gMarketConfig.setMap(null);  
                             gMarketConfig = new google.maps.Marker({
                                 position: self.pos,
@@ -198,7 +247,8 @@ export default {
                     });         
                 });  
             });
-        }     
+        }   
+        this.$socket.emit('joinApp4');  
     }
 }
 </script>

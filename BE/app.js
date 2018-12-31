@@ -8,6 +8,7 @@ var io = require('./socketServer');
 io.attach(http);
 var userCtrl = require('./controllers/userController');
 var managerCtrl = require('./controllers/managerController')(io);
+var driverCtrl = require('./controllers/driverController')(io);
 app.io = io;
 app.use(cors());
 app.use(bodyParser.json());
@@ -42,6 +43,7 @@ app.get('/', (req, res) => {
 });
 app.use('/user',userCtrl);
 app.use('/manager',verifyAccessToken,managerCtrl);
+app.use('/driver',verifyAccessToken,driverCtrl);
 var port = process.env.port || 3000;
 http.listen(port, () => {
     console.log(`api running on port ${port}`);
