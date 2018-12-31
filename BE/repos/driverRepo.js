@@ -3,13 +3,13 @@ var db = require('../fn/mysql-db');
 exports.updateStatusRequest = function(req){
     var sql = `UPDATE request
     SET Status = ${req.Status}
-    WHERE IDUser = ${req.Id}`
+    WHERE ID = ${req.Id}`
     return db.write(sql);
 }
 
 exports.receiverDriverRequest = function(req){
     var sql = `INSERT INTO requestdriver(IDDriver,IDRequest) 
-    VALUES ('${req.IDDriver}','${req.IDRequest}',${1}')`;
+    VALUES ('${req.IDDriver}','${req.IDRequest}')`;
     return db.write(sql);
 }
 
@@ -40,4 +40,11 @@ exports.getRequest = function(status){
     ORDER BY Id
     LIMIT 1`;
     return db.load(sql);
+}
+
+exports.getDriver = function(){
+    var sql = `SELECT *
+    FROM driver
+    WHERE Status = 1`
+    return db.write(sql);
 }

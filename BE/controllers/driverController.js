@@ -2,6 +2,7 @@ var ioSocket;
 var config = require('../config/config')
 var express = require('express');
 var driverRepo = require('../repos/driverRepo');
+var managerRepo = require('../repos/managerRepo');
 var router = express.Router();
 
 router.put('/updatelocationdriver',(req,res) => {
@@ -28,6 +29,12 @@ router.put('/updatestatusrequest',(req,res) => {
         res.json({
             result
         });
+    //socket send new list for app3
+    managerRepo.getRequestManagement().then(dataApp3 => {
+        ioSocket.sockets.in(config.App3.Room).emit('listApp3',dataApp3);
+        }).catch(errApp3 => {
+            ioSocket.sockets.in(config.App3.Room).emit('listApp3',[]);
+        });
     }).catch(err => {
         console.log(err);
         res.statusCode = 404;
@@ -44,14 +51,7 @@ router.put('/updatestatusdriver',(req,res) => {
         res.statusCode = 201;
         res.json({
             result
-        });
-    if (model.Status == 1){
-        driverRepo.getRequest(2).then(dataApp4 => {
-            ioSocket.sockets.in(config.App4.Room).emit('listApp4',dataApp4);
-        }).catch(errApp4 => {
-            ioSocket.sockets.in(config.App4.Room).emit('listApp4',[]);
-        });
-    }       
+        });  
     }).catch(err => {
         console.log(err);
         res.statusCode = 404;

@@ -1,10 +1,11 @@
 <template>
     <div>
         <h1>{{msg}}</h1>
-            <b-modal id="modalInfo" @hide="resetModal" :title="'123'" @ok="handleOk">
-            <pre>Thông tin khách hàng : {{modalInfo.content.second}} </pre>
-            <pre>Điện thoại: </pre>
-            <pre>Địa chỉ: </pre>
+            <b-modal id="modalInfo" @hide="resetModal" :title="modalInfo.title" @ok="confirm">
+            <pre>Thông tin khách hàng : {{modalInfo.content.Name}} </pre>
+            <pre>Điện thoại: {{modalInfo.content.Phone}} </pre>
+            <pre>Địa chỉ: {{modalInfo.content.Address}} </pre>
+            <pre>Ghi chú: {{modalInfo.content.Note}} </pre>
             </b-modal>
         <b-row>
             <b-col cols="12" md="12"  >
@@ -60,15 +61,12 @@ export default {
         }
     },
     methods: {
-        handleOk (evt) {
-            confirm()
-        },
         changStatus(){   
             var self = this;         
             if(self.status == "ON"){
                 var model = {
                     Id: self.Id,
-                    Status: 0
+                    Status: 1
                 };  
                 self.status = "OFF";
                 service.updatestatusdriver(model) 
@@ -76,22 +74,22 @@ export default {
             else{
                 var model = {
                     Id: self.Id,
-                    Status: 1
+                    Status: 0
                 };  
                 self.status = "ON";
-                service.updatestatusdriver(model) 
+                service.updatestatusdriver(model)           
             } 
            
         },
         confirm() {
         var self = this;    
-        self.statusBtn.disabled = true;
         self.startBtn.disabled = false;
         self.directionsService = new google.maps.DirectionsService();
         self.directionsDisplay = new google.maps.DirectionsRenderer();
         self.directionsDisplay.setMap(self.map);
         var start = new google.maps.LatLng(self.pos.lat,self.pos.lng);
-        var end = new google.maps.LatLng(10.77329378731486,106.68930771939631);
+        var location = JSON.parse(self.items.Location1);
+        var end = new google.maps.LatLng(location.lat,location.lng);
         var request = {
             origin: start,
             destination: end,
@@ -107,17 +105,27 @@ export default {
                     } else {
                     window.alert('Directions request failed due to ' + status);
                     }
-            });       
+            });   
+            var model = {
+                Id: self.Id,
+                Status: 2
+            };  
+            service.updatestatusdriver(model) 
+            var model1 = {
+                Id: self.items.Id,
+                Status: 3
+            };  
+            service.updatestatusrequest(model1)
+            var model2 = {
+                IDRequest: self.items.Id,
+                IDDriver: self.Id,
+            };  
+            service.receiverDriverRequest(model2)    
         },
         start() {
             var self = this;
-            self.confirmBtn.disabled = true;
             self.startBtn.disabled = true;
             self.endBtn.disabled = false;   
-            self.$root.$emit('bv::show::modal', 'modalInfo');
-            setTimeout(function(){
-                self.$root.$emit('bv::hide::modal', 'modalInfo');
-            }, 10000);
         },
         end(){
             var self = this;
@@ -126,6 +134,25 @@ export default {
             self.statusBtn.disabled = false;
             self.map.setCenter(self.pos);
             self.map.setZoom(18)
+            var model = {
+                    Id: self.Id,
+                    Status: 1
+                };  
+            service.updatestatusdriver(model) 
+            var model1 = {
+                Id: self.items.Id,
+                Status: 4
+            };  
+            service.updatestatusrequest(model1)
+            var model2 = {
+                IDRequest: self.items.Id,
+                IDDriver: self.Id,
+            };  
+            var model2 = {
+                Id: self.Id,
+                Location: JSON.parse(self.items.Location1)
+            }
+            service.updatelocationdrive(model2)  
         },
         resetModal () {
             this.modalInfo.title = ''
@@ -134,9 +161,15 @@ export default {
     },
     sockets:{
         listApp4(data) {
-            console.log(data)
             var self = this;
-            self.items = data;
+            self.items = data[0];
+            self.modalInfo.title = `Thông tin khách hàng`
+            self.modalInfo.content = ''
+            self.modalInfo.content = self.items;
+            self.$root.$emit('bv::show::modal', 'modalInfo');
+            setTimeout(function(){
+                self.$root.$emit('bv::hide::modal', 'modalInfo');
+            }, 10000);     
         }
     },
     mounted(){
@@ -248,7 +281,7 @@ export default {
                 });  
             });
         }   
-        this.$socket.emit('joinApp4');  
+        this.$socket.emit('joinApp4',self.Id);  
     }
 }
 </script>
